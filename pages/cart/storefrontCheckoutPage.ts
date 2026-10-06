@@ -1,5 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test';
 import { BasePage } from '../../core/ui/basePage';
+import { CheckoutContactAndShipping } from '../../types/cart.types';
 
 export class StorefrontCheckoutPage extends BasePage {
   constructor(page: Page) {
@@ -44,13 +45,7 @@ export class StorefrontCheckoutPage extends BasePage {
     await expect(this.orderSummaryButton).toBeVisible();
   }
 
-  async fillContactAndShipping(params: {
-    email: string;
-    lastName: string;
-    address: string;
-    city: string;
-    pinCode: string;
-  }): Promise<void> {
+  async fillContactAndShipping(params: CheckoutContactAndShipping): Promise<void> {
     await expect(this.emailInput).toBeVisible();
     await this.emailInput.fill(params.email);
 
@@ -67,13 +62,7 @@ export class StorefrontCheckoutPage extends BasePage {
     await this.pinCodeInput.fill(params.pinCode);
   }
 
-  async verifyContactAndShippingValues(params: {
-    email: string;
-    lastName: string;
-    address: string;
-    city: string;
-    pinCode: string;
-  }): Promise<void> {
+  async verifyContactAndShippingValues(params: CheckoutContactAndShipping): Promise<void> {
     await expect(this.emailInput).toHaveValue(params.email);
     await expect(this.lastNameInput).toHaveValue(params.lastName);
     await expect(this.addressInput).toHaveValue(params.address);
