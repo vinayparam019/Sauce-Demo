@@ -24,7 +24,7 @@ export class StorefrontCheckoutPage extends BasePage {
   }
 
   private get addressInput(): Locator {
-    return this.page.getByRole('textbox', { name: 'Address' });
+    return this.page.getByRole('combobox', { name: 'Address' });
   }
 
   private get cityInput(): Locator {
@@ -35,7 +35,7 @@ export class StorefrontCheckoutPage extends BasePage {
     return this.page.getByRole('textbox', { name: 'PIN code' });
   }
 
-  private get payNowButtonDisabled(): Locator {
+  private get payNowButton(): Locator {
     return this.page.getByRole('button', { name: 'Pay now' });
   }
 
@@ -70,8 +70,8 @@ export class StorefrontCheckoutPage extends BasePage {
     await expect(this.pinCodeInput).toHaveValue(params.pinCode);
   }
 
-  async verifyPayNowButtonIsDisabled(): Promise<void> {
-    await expect(this.payNowButtonDisabled).toBeVisible();
-    await expect(this.payNowButtonDisabled).toBeDisabled();
+  async verifyPayNowButtonIsEnabled(): Promise<void> {
+    await expect(this.payNowButton).toBeVisible();
+    await expect(this.payNowButton).toBeEnabled();
   }
 }

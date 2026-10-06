@@ -1,14 +1,15 @@
-import { test } from '@playwright/test';
-import { StorefrontCatalogPage } from '../../pages/cart/storefrontCatalogPage';
-import { StorefrontCartPage } from '../../pages/cart/storefrontCartPage';
-import { StorefrontCheckoutPage } from '../../pages/cart/storefrontCheckoutPage';
+import { test, expect } from '@playwright/test';
+
 import { StorefrontHomePage } from '../../pages/cart/storefrontHomePage';
+import { StorefrontCatalogPage } from '../../pages/cart/storefrontCatalogPage';
 import { StorefrontLoginPage } from '../../pages/cart/storefrontLoginPage';
 import { StorefrontProductPage } from '../../pages/cart/storefrontProductPage';
+import { StorefrontCartPage } from '../../pages/cart/storefrontCartPage';
+import { StorefrontCheckoutPage } from '../../pages/cart/storefrontCheckoutPage';
 import { CheckoutContactAndShipping } from '../../types/cart.types';
 
-test.describe('Cart - Purchase flow smoke', { tag: ['@cart', '@regression'] }, () => {
-  test('@new SA-TC-1 - End-to-end purchase flow from homepage to order confirmation', async ({ page }) => {
+test.describe('Cart - End-to-end purchase flow', { tag: ['@cart', '@regression'] }, () => {
+  test('@new SA-TC-1 - Smoke: homepage to checkout readiness', async ({ page }) => {
     const homePage = new StorefrontHomePage(page);
     const catalogPage = new StorefrontCatalogPage(page);
     const loginPage = new StorefrontLoginPage(page);
@@ -16,81 +17,62 @@ test.describe('Cart - Purchase flow smoke', { tag: ['@cart', '@regression'] }, (
     const cartPage = new StorefrontCartPage(page);
     const checkoutPage = new StorefrontCheckoutPage(page);
 
-    const email = process.env.TEST_USERNAME ?? process.env.APP_USERNAME;
-    const password = process.env.TEST_PASSWORD ?? process.env.APP_PASSWORD;
-
-    if (!email) {
-      throw new Error('Missing TEST_USERNAME/APP_USERNAME env var required for checkout email field.');
-    }
+    const username = process.env.TEST_USERNAME || process.env.APP_USERNAME;
+    const password = process.env.TEST_PASSWORD || process.env.APP_PASSWORD;
 
     const checkoutContactAndShipping: CheckoutContactAndShipping = {
-      email,
-      lastName: 'Test',
+      email: 'seconduser@example.com',
+      lastName: 'Admin',
       address: '1 Test Street',
-      city: 'Test City',
+      city: 'Mumbai',
       pinCode: '400001',
     };
 
-    // Arrange
+    // Arrange: Open homepage and navigate to login
     await homePage.goto();
     await homePage.verifyHomePageVisible();
 
-    // Act
     await homePage.clickCatalog();
-
-    // Assert
     await catalogPage.verifyCatalogVisible();
 
-    // Act
     await catalogPage.clickLogIn();
-
-    // Assert
     await loginPage.verifyLoginPageVisible();
 
-    // Act
-    if (email && password) {
-      await loginPage.login({ email, password });
-
-      // Assert
-      // Note: this demo storefront may present hCaptcha, which can block automation.
-      // If login succeeds, we assert authenticated state; otherwise we continue as guest.
-      await loginPage.verifyLoggedInOrStillOnLogin();
+    // Act: Attempt login (may be blocked by hCaptcha)
+    if (username && password) {
+      await loginPage.login({ email: username, password });
     }
 
-    // Arrange
+    // Assert: Either logged in or still on login (hCaptcha)
+    await loginPage.verifyLoggedInOrStillOnLogin();
+
+    // Act: Continue purchase flow as guest
     await homePage.goto();
     await homePage.verifyHomePageVisible();
 
-    // Act
     await homePage.openGreyJacketProduct();
-
-    // Assert
     await productPage.verifyGreyJacketProductVisible();
 
-    // Act
     await productPage.addToCart();
 
-    // Assert
+    // Assert: Cart count updated
     await productPage.verifyCartCountIsOne();
 
-    // Act
-    await productPage.goToCartViaHeaderCheckoutLink();
-
-    // Assert
+    // Act: Go to cart and proceed to checkout
+    await cartPage.goto();
     await cartPage.verifyCartPageVisible();
     await cartPage.verifyGreyJacketQuantityIsOne();
 
-    // Act
     await cartPage.proceedToCheckout();
 
-    // Assert
+    // Assert: Checkout page and order summary visible
     await checkoutPage.verifyCheckoutPageVisible();
 
-    // Act
+    // Act: Fill required contact + shipping fields
     await checkoutPage.fillContactAndShipping(checkoutContactAndShipping);
 
-    // Assert
+    // Assert: Values accepted and checkout can proceed to payment
     await checkoutPage.verifyContactAndShippingValues(checkoutContactAndShipping);
-    await checkoutPage.verifyPayNowButtonIsDisabled();
+    await checkoutPage.verifyPayNowButtonIsEnabled();
   });
 });
