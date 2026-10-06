@@ -1,0 +1,38 @@
+{
+  "name": "qmagic-playwright-skeleton",
+  "version": "1.0.0",
+  "description": "Generic Qmagic Playwright and TypeScript UI/API framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test tests/ui",
+    "test:api": "playwright test tests/api",
+    "test:integration": "playwright test tests/integration",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:regression": "playwright test --grep @regression",
+    "test:examples": "cross-env TAGS=@example playwright test --grep @example",
+    "report": "npx playwright show-report",
+    "format": "npx prettier --write .",
+    "lint": "npx eslint .",
+    "lint:fix": "npx eslint . --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.58.0",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
+    "allure-playwright": "^3.4.2",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.6.1",
+    "eslint": "^10.8.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-playwright": "^2.5.1",
+    "eslint-plugin-unused-imports": "^4.3.0",
+    "prettier": "^3.8.1",
+    "typescript": "^5.0.0"
+  }
+}
