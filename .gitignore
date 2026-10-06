@@ -1,11 +1,12 @@
-# Playwright
+# Dependencies and generated output
 node_modules/
+/dist/
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-/reports/
 /.auth/
-/.github/workflows/ci.yml
+.env
+.env.*
 *.env
 !example.env

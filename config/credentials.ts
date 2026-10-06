@@ -40,9 +40,6 @@ export function getUser(key: string): TestUser {
 }
 
 export const credentials = {
-  apiToken: process.env.API_AUTH_TOKEN || '',
   user: getUser('user'),
-  secondUser: getUser('secondUser'),
-  admin: getUser('admin'),
 };
 

@@ -5,14 +5,14 @@
  * the merged entry point directly.
  */
 import { test as baseTest } from '@playwright/test';
-import { ExamplePage } from '../pages/examples/examplePage';
+import { LoginPage } from '../pages/storefront/loginPage';
 
 export type PageFixtures = {
-  examplePage: ExamplePage;
+  loginPage: LoginPage;
 };
 
 export const test = baseTest.extend<PageFixtures>({
-  examplePage: async ({ page }, use) => {
-    await use(new ExamplePage(page));
+  loginPage: async ({ page }, use) => {
+    await use(new LoginPage(page));
   },
 });
