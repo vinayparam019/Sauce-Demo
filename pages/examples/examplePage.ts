@@ -36,8 +36,8 @@ export class ExamplePage extends BasePage {
   }
 
   async login(
-    username = credentials.user.email,
-    password = credentials.user.password,
+    username: string = process.env.TEST_USERNAME || process.env.APP_USERNAME || credentials.user.email,
+    password: string = process.env.TEST_PASSWORD || process.env.APP_PASSWORD || '',
   ): Promise<void> {
     await this.navigateToLogin();
     await this.usernameInput.fill(username);

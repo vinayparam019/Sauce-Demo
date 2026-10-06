@@ -7,7 +7,7 @@ test.describe('Cart - Purchase flow smoke', { tag: ['@cart', '@regression'] }, (
     const loginPage = new LoginPage(page);
 
     const username = process.env.TEST_USERNAME || process.env.APP_USERNAME || credentials.user.email;
-    const password = process.env.TEST_PASSWORD || process.env.APP_PASSWORD || credentials.user.password;
+    const password = process.env.TEST_PASSWORD || process.env.APP_PASSWORD || '';
 
     // Arrange
     await loginPage.goto();
